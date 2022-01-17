@@ -1,22 +1,27 @@
-//1. Создание и рендер разметки по массиву данных galleryItems
+// 1. Создание и рендер разметки по массиву данных galleryItems
 // и предоставленному шаблону элемента галереи.
-//2. Реализация делегирования на div.gallery и получение url большого изображения.
-// 3. Подключение скрипта и стилей библиотеки модального окна basicLightbox. 
+// 2. Изображение обернуто в ссылку, а значит при клике по умолчанию пользователь будет перенаправлен на другую страницу. 
+// Запрети это поведение по умолчанию.
+// 4. Реализация делегирования на div.gallery и получение url большого изображения.
+// 5. Подключение скрипта и стилей библиотеки модального окна basicLightbox. 
 // Используй CDN сервис jsdelivr 
-// 4.Открытие модального окна по клику на элементе галереи. 
-// 5.Замена значения атрибута src элемента <img> в модальном окне перед открытием. 
+// 6. Открытие модального окна по клику на элементе галереи. 
+// 7. Замена значения атрибута src элемента <img> в модальном окне перед открытием. 
 // Используй готовую разметку модального окна с изображением из примеров библиотеки basicLightbox.
 
 import { galleryItems } from './gallery-items.js';
 
+// console.log(galleryItems);
+
 const galleryContainer = document.querySelector('.js-gallery');
-const gallerryCardsMarkup = createGallerryCardsMarkup(galleryItems);
 
-galleryContainer.insertAdjacentHTML("beforeend",gallerryCardsMarkup);
-galleryContainer.addEventListener('click', openModal);
+const galleryCardsMarkup = createGalleryCardsMarkup(galleryItems);
 
-function createGallerryCardsMarkup(img) {
-    return img.map(({ preview, original, description }) => {
+galleryContainer.insertAdjacentHTML("beforeend",galleryCardsMarkup);
+galleryContainer.addEventListener('click', onGalleryContainerClick);
+
+function createGalleryCardsMarkup(galleryItems) {
+    return galleryItems.map(({ preview, original, description }) => {
         return `
         <div class="gallery__item">
         <a class="gallery__link" href="${original}">
@@ -30,30 +35,30 @@ function createGallerryCardsMarkup(img) {
     }).join('');
 }; 
 
-function openModal(evt) {
+function onGalleryContainerClick(evt) {
     evt.preventDefault();
 
-    if (evt.target.nodeName !== 'img') {
+    if (!evt.target.classList.contains('gallery__image')) {
         return;
     }
-};
 
-// const lightbox = document.createElement('div');
-// lightbox.id = 'lightbox';
-// document.body.appendChild(lightbox);
+    const modalMarkup = `<img src="${evt.target.dataset.source}" alt="${evt.target.alt}">`;
+    const instance = basicLightbox.create(modalMarkup);
 
-// const images = document.querySelectorAll('img');
-// images.forEach(image => {
-//     image.addEventListener('click', evt => {
-//     lightbox.classList.add('active');
-//     const img = document.createElement('img');
-//     img.src = image.src;
-//         lightbox.appendChild(img);
-//     })
-// })
+    instance.show();
 
-// lightbox.addEventListener('click', evt => {
-//     if (evt.target !== evt.currentTarget)
-//     return lightbox.classList.remove('active')
-// })
+    /* Закрытие модального окна по нажатию клавиши Escape */
+
+    window.addEventListener('keydown', evt => {
+    if (evt.code === 'Escape') {
+        instance.close();
+        }
+    });
+
+//    window.addEventListener('keydown', pressOnKeyArrowLeft);
+//     window.addEventListener('keydown', pressOnKeyArrowRight);
+//     window.addEventListener('keydown', pressOnKeyArrowUP);
+//     window.addEventListener('keydown', pressOnKeyArrowDown);
+
+}
 
