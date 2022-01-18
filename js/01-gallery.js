@@ -33,7 +33,7 @@ function createGalleryCardsMarkup(galleryItems) {
         </a>
         </div>`;
     }).join('');
-}; 
+}
 
 function onGalleryContainerClick(evt) {
     evt.preventDefault();
@@ -54,11 +54,5 @@ function onGalleryContainerClick(evt) {
         instance.close();
         }
     });
-
-//    window.addEventListener('keydown', pressOnKeyArrowLeft);
-//     window.addEventListener('keydown', pressOnKeyArrowRight);
-//     window.addEventListener('keydown', pressOnKeyArrowUP);
-//     window.addEventListener('keydown', pressOnKeyArrowDown);
-
 }
 
